@@ -85,12 +85,14 @@ def service_manipulate_data(data_extracted: list) -> dict:
 def service_write_to_stdout(data_manipulated: dict) -> None:
     for item in data_manipulated.items():
         print(item)
-        # if a json like obj is really desired tobe printed
-        # print(json.dumps(item))
+        # if a json like obj is really desired to be printed:
+        # import json
+        # print(json.dumps(item, indent=4))
 
-    # if desired data.json as result
+    # if desired data.json as result:
+    # import json
     # with open('data.json', 'w') as f:
-    #     json.dump(data, f)
+    #     json.dump(data_manipulated, f, indent=4)
 
 
 if __name__ == '__main__':
