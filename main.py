@@ -3,11 +3,14 @@ As 'the goal is to create a single python2/3 file that uses only standard librar
 that's my best solution according to the deadline
 """
 import csv
+import sys
 from collections import defaultdict
 from copy import deepcopy
 from datetime import datetime
 from io import BytesIO, TextIOWrapper
+from itertools import groupby
 from operator import itemgetter
+from pprint import pprint
 from urllib import request
 from zipfile import ZipFile
 
@@ -60,31 +63,20 @@ def service_manipulate_data(data_extracted: list) -> dict:
     :return:
     """
 
-    areas = set()
-    periods_map = defaultdict(set)
-    fields_map = defaultdict(list)
+    data = defaultdict(list)
 
-    data = deepcopy(sorted(data_extracted, key=itemgetter('REF_AREA')))
+    data_xt = deepcopy(sorted(data_extracted, key=itemgetter('REF_AREA')))
+    x = defaultdict(list)
+    for key, group in groupby(data_xt, key=itemgetter('REF_AREA', 'ENERGY_PRODUCT', 'FLOW_BREAKDOWN',
+                                                      'UNIT_MEASURE', 'ASSESSMENT_CODE')):
+        data[key].append(list(group))
 
-    for d in data:
-        ref_area = d.pop('REF_AREA')
-        areas.add(ref_area)
-        periods_map[ref_area].add(datetime.strptime(d.pop('TIME_PERIOD'), '%Y-%m').isoformat())
-        fields_map[ref_area].append(d)
-
-    normalized = {
-        a: {
-            'periods': list(periods_map[a]),
-            'fields': fields_map[a]
-        } for a in areas
-    }
-
-    return normalized
+    return data
 
 
 def service_write_to_stdout(data_manipulated: dict) -> None:
     for item in data_manipulated.items():
-        print(item)
+        pprint(item, indent=4)
         # if a json like obj is really desired to be printed:
         # import json
         # print(json.dumps(item, indent=4))
@@ -98,4 +90,4 @@ def service_write_to_stdout(data_manipulated: dict) -> None:
 if __name__ == '__main__':
     shooju_senior()
     print('_'*10)
-    print(bytes.fromhex('62792068747470733a2f2f6769746875622e636f6d2f726f647269676f6464632f').decode('utf-8'))
+    sys.stdout.write(str(bytes.fromhex('62792068747470733a2f2f6769746875622e636f6d2f726f647269676f6464632f').decode('utf-8')))
