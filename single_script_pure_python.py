@@ -37,7 +37,7 @@ ASSESSMENT_CODE = {'1': 'Results of the assessment show reasonable levels of com
                    '3': 'Data has not been assessed'}
 
 
-def shooju_senior():
+def main_service():
     """
     Main function who call unacouple services to divide
     responsibilities and facilitate maintenance and readability
@@ -159,7 +159,7 @@ def service_write_to_stdout(data_manipulated: list) -> None:
 
 
 if __name__ == '__main__':
-    shooju_senior()
+    main_service()
     print('_'*10)
     sys.stdout.write(str(bytes.fromhex('62792068747470733a2f2f6769746875622e636f6d2f726f647269676f6464632f')
                          .decode('utf-8')))
