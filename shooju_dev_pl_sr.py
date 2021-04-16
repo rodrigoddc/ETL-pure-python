@@ -93,6 +93,7 @@ def service_grouped_data(data_extracted: list) -> dict:
 
     # for this time series, as i couldn't inquire which specific field is intended to be analyzed,
     # i've assumed that all fields could be a case of analysis, so the data were grouped by all fields
+    # cause OBS_VALUE problally is the observated value for his previous columns grouped case on csv
     for key, group in groupby(data_xt, key=itemgetter('REF_AREA', 'ENERGY_PRODUCT', 'FLOW_BREAKDOWN',
                                                       'UNIT_MEASURE', 'ASSESSMENT_CODE')):
         data_tmp[key].append(list(group))
