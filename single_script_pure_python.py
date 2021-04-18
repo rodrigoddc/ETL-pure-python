@@ -91,11 +91,17 @@ def service_grouped_data(data_extracted: list) -> dict:
 
     data_tmp = defaultdict(list)
 
-    # for this time series, as i couldn't inquire which specific field is intended to be analyzed,
-    # i've assumed that all fields could be a case of analysis, so the data were grouped by all fields
-    # cause OBS_VALUE problally is the observated value for his previous columns grouped case on csv
+    # for this time series, as i couldn't assert (i haven't found directly reference on docs) which specific field
+    # was intended to be analyzed, i've presumed that all fields (except OBS_VALUE, cause i think that it shall be
+    # the value observed on point x for the previous columns grouped on csv) could be an object of analysis, so the
+    # data were grouped by all fields, even the ASSESSMENT_CODE field. This way i imagine that ASSESSMENT_CODE as
+    # a value for a key in series_id, would be easier to validate the use or not for that specific point at this
+    # series
     for key, group in groupby(data_xt, key=itemgetter('REF_AREA', 'ENERGY_PRODUCT', 'FLOW_BREAKDOWN',
                                                       'UNIT_MEASURE', 'ASSESSMENT_CODE')):
+
+        # TODO: investigate better performance if implenting service_data_as_list_of_series directly here, and
+        #  iterating on this 'group' as itertools._grouper (iterator), instead of casting it to list()
         data_tmp[key].append(list(group))
 
     return data_tmp
@@ -121,7 +127,7 @@ def service_data_as_list_of_series(data_grouped: dict) -> list:
                 points_agg.append([datetime.strptime(v.get('TIME_PERIOD'), '%Y-%m').isoformat(), float(v.get('OBS_VALUE'))])
 
                 series_dict = {'series_id': '\\'.join(map(str, key)),
-                               # REF_AREA concat just to be meaningful, it could over info
+                               # REF_AREA concat just to be meaningful, could it be over info?
                                'fields': {'REF_AREA': ', '.join([v.get('REF_AREA'), REF_AREA]),
                                           'ENERGY_PRODUCT': ', '.join([v.get('ENERGY_PRODUCT'),
                                                                        ENERGY_PRODUCT[v.get('ENERGY_PRODUCT')]]),
@@ -148,7 +154,7 @@ def service_write_to_stdout(data_manipulated: list) -> None:
         # pprint(item, indent=4)
 
         # if a real json obj is desired to be printed:
-        # whitou indent cause is asked one series per line
+        # without indent cause is asked one series per line
         import json
         print(json.dumps(item))
 
@@ -160,6 +166,6 @@ def service_write_to_stdout(data_manipulated: list) -> None:
 
 if __name__ == '__main__':
     main_service()
-    print('_'*10)
+    print('_'*42)
     sys.stdout.write(str(bytes.fromhex('62792068747470733a2f2f6769746875622e636f6d2f726f647269676f6464632f')
                          .decode('utf-8')))
