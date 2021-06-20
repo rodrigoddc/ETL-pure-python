@@ -1,5 +1,4 @@
 # An ETL in a single pure python script
-## api-consume-and-normalize-data
 
 Single Pure Python script, service oriented, to make a request to https://www.jodidata.org/_resources/files/downloads/gas-data/jodi_gas_csv_beta.zip download, unzip, extract, parse csv, normalize dataset and retrieve data
 
