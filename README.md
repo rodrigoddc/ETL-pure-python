@@ -1,13 +1,17 @@
 # An ETL in a single pure python script
 
-Single Pure Python script, service oriented, to make a request to https://www.jodidata.org/_resources/files/downloads/gas-data/jodi_gas_csv_beta.zip download, unzip, extract, parse csv, normalize dataset and retrieve data
+## Motivated by a job chalenge.
 
-### Steps:
-1.  Downloaded resource from the URL `https://www.jodidata.org/_resources/files/downloads/gas-data/jodi_gas_csv_beta.zip` as input;
-2.  Unziped and parsed csv to list of csv.DictReader;
-3.  Normalized data sorting and aggregating by zone as Key, time period formated to ISO 8061, and the others fields as dicts;
-4.  Parsed as json;
-4.  Resulting from this:
+This is a Pure Python single script, service oriented, to make a request to https://www.jodidata.org/_resources/files/downloads/gas-data/jodi_gas_csv_beta.zip download, unzip, extract, parse csv, normalize dataset and retrieve data
+
+### Flow:
+1.  Download resource from the URL `https://www.jodidata.org/_resources/files/downloads/gas-data/jodi_gas_csv_beta.zip` as input;
+2.  Unzip and parse csv to list of csv.DictReader;
+3.  Normalize data as time series, sorting and aggregating by zone as Key, time period formated to ISO 8061, and the others fields;
+4.  Parse as json;
+5.  Results:
+
+The data will be transformed from this:
    
 ``` 
 [{'REF_AREA': 'ZA', 'TIME_PERIOD': '2018-08', 'ENERGY_PRODUCT': 'NATGAS', 'FLOW_BREAKDOWN': 'TOTIMPSB', 'UNIT_MEASURE': 'M3', 'OBS_VALUE': '355', 'ASSESSMENT_CODE': '1'},
